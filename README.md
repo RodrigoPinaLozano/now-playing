@@ -85,7 +85,29 @@ Root endpoint that provides API information.
 
 ## Configuration
 
-The IPTV XML source is currently hardcoded to `http://192.168.0.210:8410/iptv/xmltv.xml`. To change this, modify the `xml_url` variable in the `now_playing` function in `main.py`.
+The IPTV XML source URL can be configured in several ways:
+
+1. **Environment Variable**: Set the `XML_URL` environment variable:
+   ```
+   export XML_URL="http://your-iptv-server/xmltv.xml"
+   ```
+
+2. **Config File**: Edit the `config.json` file in the project root:
+   ```json
+   {
+       "xml_url": "http://your-iptv-server/xmltv.xml"
+   }
+   ```
+
+3. **Docker Environment Variable**: When running with Docker, pass the environment variable:
+   ```
+   docker run -p 8000:8000 -e XML_URL="http://your-iptv-server/xmltv.xml" now-playing
+   ```
+
+The configuration priority is:
+1. Environment variable (highest priority)
+2. Config file
+3. Default value: `http://192.168.0.210:8410/iptv/xmltv.xml` (lowest priority)
 
 ## License
 

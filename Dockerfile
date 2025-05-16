@@ -9,5 +9,8 @@ COPY . .
 
 EXPOSE 8000
 
+# Default XML URL - can be overridden with environment variable
+ENV XML_URL="http://192.168.0.210:8410/iptv/xmltv.xml"
+
 # Run the application
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
