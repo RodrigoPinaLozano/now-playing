@@ -5,6 +5,7 @@ A simple FastAPI application that fetches IPTV programme data and provides curre
 ## Features
 
 - `/nowplaying` endpoint that fetches XML data from an IPTV source
+- **NEW**: Ability to specify a custom XML URL via query parameter (`?xml_url=...`)
 - Parses XML to extract programme titles
 - Returns data in a standardized JSON format
 - Docker support for easy deployment
@@ -58,6 +59,15 @@ A simple FastAPI application that fetches IPTV programme data and provides curre
 
 Returns the titles of up to three programmes currently playing on the IPTV service.
 
+#### Query Parameters
+
+- `xml_url` (optional): Custom URL to fetch XML data from. If not provided, the default URL defined in the application will be used.
+
+Example with custom URL:
+```
+GET /nowplaying?xml_url=http://example.com/custom-xmltv.xml
+```
+
 #### Response Format
 
 ```json
@@ -85,29 +95,13 @@ Root endpoint that provides API information.
 
 ## Configuration
 
-The IPTV XML source URL can be configured in several ways:
+The default IPTV XML source URL is defined as a constant `XML_URL` in the `main.py` file. This URL is used when no custom URL is provided in the request.
 
-1. **Environment Variable**: Set the `XML_URL` environment variable:
-   ```
-   export XML_URL="http://your-iptv-server/xmltv.xml"
-   ```
+You can override the default URL by:
+1. Providing a custom URL as a query parameter: `/nowplaying?xml_url=http://example.com/custom-xmltv.xml`
+2. Modifying the `XML_URL` constant in the source code for a permanent change
 
-2. **Config File**: Edit the `config.json` file in the project root:
-   ```json
-   {
-       "xml_url": "http://your-iptv-server/xmltv.xml"
-   }
-   ```
-
-3. **Docker Environment Variable**: When running with Docker, pass the environment variable:
-   ```
-   docker run -p 8000:8000 -e XML_URL="http://your-iptv-server/xmltv.xml" now-playing
-   ```
-
-The configuration priority is:
-1. Environment variable (highest priority)
-2. Config file
-3. Default value: `http://192.168.0.210:8410/iptv/xmltv.xml` (lowest priority)
+Note: Previous versions used a config.json file and environment variables for configuration, but these have been removed in favor of a hardcoded constant with query parameter override capability.
 
 ## License
 

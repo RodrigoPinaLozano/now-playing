@@ -3,33 +3,19 @@ import httpx
 import xml.etree.ElementTree as ET
 from typing import List, Dict, Optional
 import uvicorn
-import os
-import json
+
+# Constant XML URL
+XML_URL = "http://192.168.0.210:8410/iptv/xmltv.xml"
 
 app = FastAPI(title="Now Playing API")
 
 def get_config():
     """
-    Load configuration from config.json file or environment variables.
-    Environment variables take precedence over config file values.
+    Load configuration.
+    This function is kept for potential future configuration needs.
     """
-    # Default configuration
-    config = {
-        "xml_url": "http://192.168.0.210:8410/iptv/xmltv.xml"
-    }
-    
-    # Try to load from config file
-    try:
-        if os.path.exists("config.json"):
-            with open("config.json", "r") as f:
-                file_config = json.load(f)
-                config.update(file_config)
-    except Exception as e:
-        print(f"Warning: Failed to load config file: {e}")
-    
-    # Environment variables override config file
-    if os.environ.get("XML_URL"):
-        config["xml_url"] = os.environ.get("XML_URL")
+    # Configuration dictionary
+    config = {}
     
     return config
 
@@ -67,14 +53,17 @@ async def parse_programmes(xml_data: str, limit: int = 3) -> List[Dict[str, Opti
         raise HTTPException(status_code=500, detail=f"Failed to parse XML data: {str(e)}")
 
 @app.get("/nowplaying")
-async def now_playing():
+async def now_playing(xml_url: Optional[str] = None):
     """
     Endpoint that fetches current programme titles from IPTV XML data
     and returns them in the required JSON format.
+    
+    Parameters:
+    - xml_url: Optional URL to fetch XML data from. If not provided, the default URL will be used.
     """
-    config = get_config()
-    xml_url = config["xml_url"]
-    xml_data = await fetch_xml_data(xml_url)
+    # Use the provided URL if available, otherwise fall back to the constant
+    url_to_use = xml_url if xml_url else XML_URL
+    xml_data = await fetch_xml_data(url_to_use)
     programmes = await parse_programmes(xml_data)
     
     return {

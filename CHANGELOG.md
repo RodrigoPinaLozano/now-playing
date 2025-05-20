@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Removed the ability to configure XML URL via environment variables and config.json
+- Made XML URL a constant in the main.py file
+- Updated documentation to reflect these changes
+- Removed the config.json file as it's no longer needed
+- Simplified the get_config() function in main.py
+- Removed unused imports (os, json) from main.py
+
+### Added
+- **New Feature**: Added ability to override the default XML URL via query parameter in the /nowplaying endpoint
+  - Users can now specify a custom XML URL using: `/nowplaying?xml_url=http://example.com/custom-xmltv.xml`
+  - This provides flexibility without requiring configuration files or environment variables
+- Updated documentation to highlight and explain the new query parameter functionality
+
 ## [1.1.0] - 2025-05-16
 
 ### Added
