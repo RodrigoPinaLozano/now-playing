@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the config.json file as it's no longer needed
 - Simplified the get_config() function in main.py
 - Removed unused imports (os, json) from main.py
+- Modified the `parse_programmes` function to fetch the first programme element of each different channel, rather than a fixed number of programmes regardless of channel
 
 ### Added
 - **New Feature**: Added ability to override the default XML URL via query parameter in the /nowplaying endpoint

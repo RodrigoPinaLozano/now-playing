@@ -57,7 +57,7 @@ A simple FastAPI application that fetches IPTV programme data and provides curre
 
 ### GET /nowplaying
 
-Returns the titles of up to three programmes currently playing on the IPTV service.
+Returns the titles of the first programme from each channel currently playing on the IPTV service.
 
 #### Query Parameters
 
@@ -74,20 +74,23 @@ GET /nowplaying?xml_url=http://example.com/custom-xmltv.xml
 {
     "frames": [
         {
-            "text": "Programme Title 1",
-            "icon": null
+            "text": "Programme Title from Channel 1",
+            "icon": "7740"
         },
         {
-            "text": "Programme Title 2",
-            "icon": null
+            "text": "Programme Title from Channel 2",
+            "icon": "7740"
         },
         {
-            "text": "Programme Title 3",
-            "icon": null
+            "text": "Programme Title from Channel 3",
+            "icon": "7740"
         }
+        // One entry per channel
     ]
 }
 ```
+
+Note: The response will contain one entry for each unique channel in the XML data, with each entry representing the first programme of that channel.
 
 ### GET /
 

@@ -29,24 +29,39 @@ async def fetch_xml_data(url: str) -> str:
     except httpx.HTTPError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch XML data: {str(e)}")
 
-async def parse_programmes(xml_data: str, limit: int = 3) -> List[Dict[str, Optional[str]]]:
+async def parse_programmes(xml_data: str, limit: int = None) -> List[Dict[str, Optional[str]]]:
     """
-    Parse XML data and extract programme titles.
+    Parse XML data and extract the first programme title from each channel.
     Returns a list of dictionaries with text and icon fields.
     """
     try:
         root = ET.fromstring(xml_data)
         programmes = root.findall(".//programme")
         
-        results = []
-        for i, programme in enumerate(programmes[:limit]):
-            title_element = programme.find(".//title")
-            title = title_element.text if title_element is not None else "No title available"
+        # Dictionary to track the first programme of each channel
+        channel_programmes = {}
+        
+        # Group programmes by channel
+        for programme in programmes:
+            # Get the channel ID from the programme element
+            channel_id = programme.get("channel")
             
-            results.append({
-                "text": title,
-                "icon": "7740"
-            })
+            # Only store the first programme for each channel
+            if channel_id and channel_id not in channel_programmes:
+                title_element = programme.find(".//title")
+                title = title_element.text if title_element is not None else "No title available"
+                
+                channel_programmes[channel_id] = {
+                    "text": title,
+                    "icon": "7740"
+                }
+        
+        # Convert the dictionary values to a list
+        results = list(channel_programmes.values())
+        
+        # Apply limit if specified
+        if limit is not None:
+            results = results[:limit]
         
         return results
     except ET.ParseError as e:
