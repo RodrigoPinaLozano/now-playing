@@ -90,7 +90,7 @@ GET /nowplaying?xml_url=http://example.com/custom-xmltv.xml
 }
 ```
 
-Note: The response will contain one entry for each unique channel in the XML data, with each entry representing the first programme of that channel.
+Note: The response will contain one entry for each unique channel in the XML data, with each entry representing the currently running program of that channel.
 
 ### GET /
 
